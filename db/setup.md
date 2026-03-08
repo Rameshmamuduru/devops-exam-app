@@ -172,4 +172,14 @@ You should see `Slave_IO_Running: Yes` and `Slave_SQL_Running: Yes` ✅
 
 If you want, I can give you a **ready-to-use YAML for a 2-pod StatefulSet with replication enabled automatically**, so you just apply it and the primary/replica setup is done.
 
+
+
+kubectl create secret generic mysql-secret \
+  --from-literal=MYSQL_ROOT_PASSWORD=StrongRootPass123 \
+  --from-literal=MYSQL_DATABASE=mydb \
+  --from-literal=MYSQL_USER=myuser \
+  --from-literal=MYSQL_PASSWORD=MyUserPass123 \
+  --from-literal=MYSQL_REPLICATION_USER=repl_user \
+  --from-literal=MYSQL_REPLICATION_PASSWORD=ReplPass123
+
 Do you want me to do that?
