@@ -59,7 +59,7 @@ spec:
           emptyDir: {}
         - name: tls
           secret:
-            secretName: mysql-tls-secret
+            secretName: mysql-tls
         - name: config
           configMap:
             name: mysql-config
