@@ -8,6 +8,13 @@ SELECT user, host FROM mysql.user;
 
 <img width="1355" height="568" alt="image" src="https://github.com/user-attachments/assets/301bf9cb-8034-442e-bbf4-492a7c278a37" />
 
+## Dns resolve test for DB-pods
+```
+kubectl run -it --rm --image=busybox:1.35 dns-test -- sh
+nslookup mysql-0.mysql.default.svc.cluster.local
+nslookup mysql.default.svc.cluster.local   # if using normal service
+```
+
 
 ## Verify conncetion between backend to DB:
 ```
@@ -156,6 +163,7 @@ If you want, I can write a **ready-to-apply YAML snippet** for:
 …so you can just apply it.
 
 Do you want me to do that?
+
 
 
 
