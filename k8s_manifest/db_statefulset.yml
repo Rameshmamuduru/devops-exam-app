@@ -45,9 +45,21 @@ spec:
               mountPath: /var/lib/mysql
             - name: mysql-init
               mountPath: /docker-entrypoint-initdb.d
+            - name: tls
+              mountPath: /etc/mysql/tls
+              readOnly: true
+            - name: config
+              mountPath: /etc/mysql/mysql.conf.d
+              readOnly: true
       volumes:
         - name: mysql-init
           configMap:
             name: mysql-init-sql
         - name: mysql-data
-          emptyDir: {} 
+          emptyDir: {}
+        - name: tls
+          secret:
+            secretName: mysql-tls-secret
+        - name: config
+          configMap:
+            name: mysql-config
