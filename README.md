@@ -63,7 +63,7 @@ data:
 kubectl apply -f mysql-config.yaml
 
 ```
-## Deploy MySQL Pod and create a headless
+## Apply secret and comfig map yml and then Deploy MySQL Pod and create a headless
 
 ## Verify DB:
 ```
@@ -89,3 +89,4 @@ mysql -h mysql-0.mysql.default.svc.cluster.local -u root -p \
       --ssl-ca=/etc/ca/ca.crt --ssl-mode=REQUIRED
 ```
 <img width="1364" height="216" alt="image" src="https://github.com/user-attachments/assets/cab043fa-c33a-4fa3-b416-5d8deb9091d2" />
+
