@@ -1,1 +1,7 @@
-Watch the video here: https://youtu.be/BScNFDBdE7M
+## Verify DB:
+```
+kubectl get pods
+kubectl exec -it mysql-0 -- mysql -u root -p
+SHOW DATABASES;
+SELECT user, host FROM mysql.user;
+```
