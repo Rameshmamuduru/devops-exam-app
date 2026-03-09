@@ -6,6 +6,9 @@ SHOW DATABASES;
 SELECT user, host FROM mysql.user;
 ```
 
+<img width="1355" height="568" alt="image" src="https://github.com/user-attachments/assets/301bf9cb-8034-442e-bbf4-492a7c278a37" />
+
+
 ## Verify conncetion between backend to DB:
 ```
 kubectl get pods
@@ -21,3 +24,4 @@ mysql -u root -p
 curl http://backend:5000
 
 ```
+
