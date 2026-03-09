@@ -1,17 +1,18 @@
-# -------- Stage 1: Build stage --------
+# -------- Stage 1: Builder --------
 FROM python:3.11-slim AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Install build dependencies
+# Install build dependencies (gcc + MySQL client headers)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    libmysqlclient-dev \
+    default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install in a virtual environment
+# Copy Python requirements
 COPY requirements.txt .
+
+# Create a virtual environment and install dependencies
 RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install --upgrade pip \
     && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
@@ -19,28 +20,27 @@ RUN python -m venv /opt/venv \
 # Copy application code
 COPY . .
 
-# -------- Stage 2: Production stage --------
+# -------- Stage 2: Production --------
 FROM python:3.11-slim
 
-# Set working directory
 WORKDIR /app
 
-# Copy virtualenv from builder
+# Copy virtual environment from builder
 COPY --from=builder /opt/venv /opt/venv
 
-# Copy application code
+# Copy application code from builder
 COPY --from=builder /app /app
 
-# Use virtualenv by default
+# Use virtual environment by default
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Set environment variables
+# Flask environment variables
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_ENV=production
 
-# Expose port
+# Expose port for backend
 EXPOSE 5000
 
-# Use gunicorn for production
+# Start the backend with Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app", "--workers", "3", "--threads", "2", "--timeout", "120"]
