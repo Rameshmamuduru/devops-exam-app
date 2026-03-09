@@ -47,4 +47,4 @@ spec:
       volumes:
         - name: mysql-ca
           secret:
-            secretName: mysql-tls-secret
+            secretName: mysql-tls
