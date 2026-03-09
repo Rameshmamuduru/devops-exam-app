@@ -61,17 +61,28 @@ spec:
         image: mysql:8.0
         env:
           - name: MYSQL_ROOT_PASSWORD
-            value: "StrongRootPass123"
-          - name: MYSQL_REPLICATION_USER
-            value: "repl_user"
-          - name: MYSQL_REPLICATION_PASSWORD
-            value: "ReplPass123"
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: MYSQL_ROOT_PASSWORD
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: MYSQL_DATABASE
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: MYSQL_REPLICATION_USER
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: MYSQL_REPLICATION_PASSWORD
         ports:
           - containerPort: 3306
-        volumeMounts:
-          - name: mysql-persistent-storage
-            mountPath: /var/lib/mysql
-  volumeClaimTemplates:
+volumeClaimTemplates:
   - metadata:
       name: mysql-persistent-storage
     spec:
