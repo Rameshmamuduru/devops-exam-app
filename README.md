@@ -85,8 +85,12 @@ nslookup mysql.default.svc.cluster.local   # if using normal service
 
 ## Verify conncetion between backend to DB:
 ```
+kubectl run -it --rm --image=mysql:8 mysql-client -- sh
+
+
 mysql -h mysql-0.mysql.default.svc.cluster.local -u root -p \
       --ssl-ca=/etc/ca/ca.crt --ssl-mode=REQUIRED
 ```
 <img width="1364" height="216" alt="image" src="https://github.com/user-attachments/assets/cab043fa-c33a-4fa3-b416-5d8deb9091d2" />
+
 
