@@ -47,3 +47,8 @@ kubectl create secret generic mysql-secret \
 <img width="1361" height="271" alt="image" src="https://github.com/user-attachments/assets/8251fd68-c23d-458e-9637-807e26b934b7" />
 
 ## Update the Backend manifest
+```
+kubectl aply -f backend_deployment.yml
+```
+<img width="1362" height="309" alt="image" src="https://github.com/user-attachments/assets/4ff60b2d-4499-4f0e-8ede-3d75dc07021d" />
+
