@@ -17,7 +17,7 @@ def get_db_connection():
         user=os.getenv('MYSQL_USER', 'root'),
         password=os.getenv('MYSQL_PASSWORD', 'rootpass'),
         database=os.getenv('MYSQL_DATABASE', 'devops_exam')
-        ssl_ca="/etc/ca/ca.crt"
+        
     )
 
 def read_certificate_template():
