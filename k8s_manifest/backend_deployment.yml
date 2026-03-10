@@ -38,16 +38,6 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: MYSQL_DATABASE
-            - name: MYSQL_SSL_CA
-              value: /etc/ca/ca.crt
-          volumeMounts:
-            - name: mysql-ca
-              mountPath: /etc/ca
-              readOnly: true
-      volumes:
-        - name: mysql-ca
-          secret:
-            secretName: mysql-tls
 ---
 apiVersion: v1
 kind: Service
