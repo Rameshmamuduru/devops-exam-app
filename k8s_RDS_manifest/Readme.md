@@ -52,3 +52,9 @@ kubectl aply -f backend_deployment.yml
 ```
 <img width="1362" height="309" alt="image" src="https://github.com/user-attachments/assets/4ff60b2d-4499-4f0e-8ede-3d75dc07021d" />
 
+## Cretae a service as ClusterIP
+```
+kubectl apply -f backend_svc.yml
+```
+<img width="1365" height="273" alt="image" src="https://github.com/user-attachments/assets/859e069b-3037-4c46-bb56-42d2f1b48442" />
+
