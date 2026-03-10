@@ -48,3 +48,15 @@ spec:
         - name: mysql-ca
           secret:
             secretName: mysql-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP
