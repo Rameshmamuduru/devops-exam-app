@@ -28,6 +28,22 @@ mysql> SELECT user, host FROM mysql.user;
 
 ```
 
+## Create a cluster 
 
+## create a secret for 
+- MYSQL_HOST
+- MYSQL_USER
+- MYSQL_PASSWORD
+- MYSQL_DATABASE
 
-## 
+```
+kubectl create secret generic mysql-secret \
+  --from-literal=MYSQL_HOST=database-1.chwk0ee0ig63.ap-south-1.rds.amazonaws.com \
+  --from-literal=MYSQL_USER=appuser \
+  --from-literal=MYSQL_PASSWORD=StrongPassword123 \
+  --from-literal=MYSQL_DATABASE=devops_exam
+
+```
+<img width="1361" height="271" alt="image" src="https://github.com/user-attachments/assets/8251fd68-c23d-458e-9637-807e26b934b7" />
+
+## Update the Backend manifest
