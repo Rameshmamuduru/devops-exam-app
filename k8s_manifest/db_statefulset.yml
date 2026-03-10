@@ -63,3 +63,16 @@ spec:
         - name: config
           configMap:
             name: mysql-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  clusterIP: None
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      name: mysql
