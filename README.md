@@ -134,6 +134,16 @@ kubectl apply -f ingress.yml
 Note: Make Sure that you have added your CNAME in the DNS Section under your domine
 <img width="1353" height="239" alt="image" src="https://github.com/user-attachments/assets/1f46b198-da38-4089-83f2-dd99fd72b0d2" />
 
+## Attempted an exam here and submitted it
+
+<img width="1354" height="329" alt="image" src="https://github.com/user-attachments/assets/fe9848a6-c8c3-4b7f-8a6c-c71a090cd703" />
+
+## Now let's go and verify the DB as well
+<img width="1365" height="537" alt="image" src="https://github.com/user-attachments/assets/12024a31-cb94-42c9-8f55-abc72134c780" />
+
+The Data Was now relected in DB Table means all working fine
+
+
 
 
 
