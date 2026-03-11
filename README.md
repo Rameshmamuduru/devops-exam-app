@@ -114,6 +114,28 @@ root@ip-172-31-30-185:/home/ubuntu#
 <img width="1359" height="561" alt="image" src="https://github.com/user-attachments/assets/32d3da41-bb4e-46d8-ac15-5e9a4a4a0c38" />
 
 
+## Deployment to Cluster
+
+```
+git clone https://github.com/Rameshmamuduru/devops-exam-app.git
+cd devops-exam-app/k8s_manifest
+
+#Apply manifests using below commmands and follow the order
+kubectl apply -f secrets.yml
+kubectl apply -f configmap.yml
+kubectl apply -f db_statefulset.yml.yml
+kubectl apply -f backend_deployment.yml
+kubectl apply -f ingress.yml
+
+```
+
+## Access App at myapp.rameshs.online
+
+Note: Make Sure that you have added your CNAME in the DNS Section under your domine
+<img width="1353" height="239" alt="image" src="https://github.com/user-attachments/assets/1f46b198-da38-4089-83f2-dd99fd72b0d2" />
+
+
+
 
 
 
