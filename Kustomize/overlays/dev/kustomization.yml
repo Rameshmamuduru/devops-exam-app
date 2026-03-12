@@ -14,5 +14,5 @@ labels:
     includeSelectors: true
 
 replicas:
-  - name: Nginx-Deploy
+  - name: backend
     count: 2
