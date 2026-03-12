@@ -20,17 +20,10 @@ replicas:
     count: 2
 
 patches:
-  - target:
-      group: apps
-      version: v1
+  - path: patch_deployment.yml
+    target:
       kind: Deployment
       name: backend
-    patch: |-
-      - op: add
-        path: /spec/template/spec/containers/0/env
-        values:
-          - name: LOG_LEVEL
-            value: debug
 
 
     
