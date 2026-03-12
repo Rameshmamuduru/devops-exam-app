@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - secrets.yml
+  - configmap.yml
+  - db_statefulset.yml
+  - backend_deployment.yml
+  - ingress_http.yml
