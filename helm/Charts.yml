@@ -1,0 +1,14 @@
+apiVersion: v2
+name: backend
+description: Helm chart for deploying backend service
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - backend
+  - api
+maintainers:
+  - name: Ramesh
+    email: ramesh@example.com
+sources:
+  - https://github.com/ramesh/backend-app

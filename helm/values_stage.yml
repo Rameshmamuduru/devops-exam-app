@@ -1,0 +1,9 @@
+namespace: stage
+
+replicaCount: 2
+
+image:
+  repo: ramesh0621/backend-1
+  tag: latest
+
+  dbimage: mysql:8.0

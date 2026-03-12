@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: {{ .Release.Name }}-backend
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: backend
@@ -13,8 +14,8 @@ spec:
         app: backend
     spec:
       containers:
-        - name: backend
-          image: ramesh0621/backend-1:latest
+        - name: {{ .Release.Name }}-backend
+          image: {{ .Values.image.repo }}:{{ .Values.image.repo }}
           ports:
             - containerPort: 5000
           env:
@@ -42,7 +43,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: {{ .Release.Name }}-backend
 spec:
   selector:
     app: backend
