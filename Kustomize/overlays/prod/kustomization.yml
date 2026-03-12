@@ -6,12 +6,12 @@ resources:
 
 nameSuffix: -prod
 
-namePrifix: -app1
+namePrefix: -app1
 
 labels:
   - pairs:
       env: prod
-      includeSeclectors: true
+    includeSelectors: true
 
 replicas:
   - name: Nginx-Deploy

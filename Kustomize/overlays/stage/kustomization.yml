@@ -6,12 +6,12 @@ resources:
 
 nameSuffix: -stage
 
-namePrifix: -app1
+namePrefix: -app1
 
 labels:
   - pairs:
-      env: stage
-      includeSeclectors: true
+      env: stgae
+    includeSelectors: true
 
 replicas:
   - name: Nginx-Deploy

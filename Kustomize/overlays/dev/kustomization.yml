@@ -6,12 +6,12 @@ resources:
 
 nameSuffix: -dev
 
-namePrifix: -app1
+namePrefix: -app1
 
 labels:
   - pairs:
       env: dev
-      includeSeclectors: true
+    includeSelectors: true
 
 replicas:
   - name: Nginx-Deploy
