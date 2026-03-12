@@ -6,4 +6,4 @@ resources:
   - configmap.yml
   - db_statefulset.yml
   - backend_deployment.yml
-  - ingress.yml
+  - ingress_http.yml
