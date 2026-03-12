@@ -6,13 +6,15 @@ resources:
 
 nameSuffix: -stage
 
-namePrefix: -app1
+namePrefix: app1-
 
 labels:
   - pairs:
-      env: stgae
+      env: stage
     includeSelectors: true
 
 replicas:
-  - name: Nginx-Deploy
+  - name: backend
     count: 3
+  - name: mysql
+    count: 2

@@ -6,7 +6,7 @@ resources:
 
 nameSuffix: -dev
 
-namePrefix: -app1
+namePrefix: app1-
 
 labels:
   - pairs:
@@ -15,4 +15,6 @@ labels:
 
 replicas:
   - name: backend
+    count: 2
+  - name: mysql
     count: 2
