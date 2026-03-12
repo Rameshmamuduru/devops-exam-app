@@ -1,5 +1,5 @@
 replicaCount: 1
-namespace: stage
+namespace: dev
 
 app:
   name: app1
@@ -13,4 +13,4 @@ ports:
   label: mysql
 
 ingress:
-  host: myappstage.rameshs.online
+  host: myappdev.rameshs.online

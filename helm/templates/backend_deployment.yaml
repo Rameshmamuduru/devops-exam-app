@@ -1,21 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-backend
-  namespace: {{ .Values.namespace }}
+  name: {{ .Release.Name }}-backend-{{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: backend
+      app: {{ .Values.app.name }}-{{ .Values.namespace }}
   template:
     metadata:
       labels:
-        app: backend
+        app: {{ .Values.app.name }}-{{ .Values.namespace }}
     spec:
       containers:
-        - name: {{ .Release.Name }}-backend
-          image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
+        - name: {{ .Release.Name }}-mysql-{{ .Values.namespace }}
+          image: {{ .Values.images.backend }}:{{ .Values.images.version }}
           ports:
             - containerPort: 5000
           env:
@@ -39,14 +38,16 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: MYSQL_DATABASE
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-backend
+  name: {{ .Release.Name }}-backend-{{ .Values.namespace }}
 spec:
   selector:
-    app: backend
+    app: {{ .Values.app.name }}-{{ .Values.namespace }}
   ports:
     - port: 5000
       targetPort: 5000

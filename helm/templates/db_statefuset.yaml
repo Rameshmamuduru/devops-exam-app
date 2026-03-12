@@ -1,50 +1,59 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}-mysql
+  name: {{ .Release.Name }}-mysql-{{ .Values.namespace }}
 spec:
   serviceName: mysql
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: mysql
+      app: {{ .Values.app.name }}-{{ .Values.namespace }}
+
   template:
     metadata:
       labels:
-        app: mysql
+        app: {{ .Values.app.name }}-{{ .Values.namespace }}
+
     spec:
       containers:
-        - name: {{ .Release.Name }}-mysql
-          image: {{ .Values.image.dbimage }}
+        - name: {{ .Release.Name }}-mysql-{{ .Values.namespace }}
+          image: {{ .Values.images.mysql }}
+
           ports:
             - containerPort: 3306
-              name: mysql
+              name: {{ .Values.ports.label }}
+
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
                   key: mysql-root-password
+
             - name: MYSQL_DATABASE
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
                   key: mysql-database
+
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
                   key: mysql-user
+
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
                   key: mysql-password
+
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
             - name: mysql-init
               mountPath: /docker-entrypoint-initdb.d
+
       volumes:
         - name: mysql-init
           configMap:
@@ -53,14 +62,15 @@ spec:
           emptyDir: {}
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-mysql
+  name: {{ .Release.Name }}-mysql-{{ .Values.namespace }}
 spec:
   clusterIP: None
   selector:
-    app: mysql
+    app: {{ .Values.app.name }}-{{ .Values.namespace }}
   ports:
     - port: 3306
-      name: mysql
+      name: {{ .Values.ports.label }}

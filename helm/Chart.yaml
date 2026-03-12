@@ -1,14 +1,25 @@
-apiVersion: v2
-name: backend
-description: Helm chart for deploying backend service
-type: application
-version: 0.1.0
-appVersion: "1.0.0"
+# Chart.yaml
+apiVersion: v2            # Use v2 for Helm 3
+name: mysql-app           # Name of your chart
+description: A Helm chart for deploying MySQL StatefulSet
+type: application         # application or library
+version: 0.1.0            # Chart version
+appVersion: "8.0"         # MySQL version (or your app version)
+icon: https://www.mysql.com/common/logos/logo-mysql-170x115.png
+
+# Optional keywords/tags
 keywords:
-  - backend
-  - api
+  - mysql
+  - database
+  - statefulset
+
+# Optional maintainers
 maintainers:
   - name: Ramesh
     email: ramesh@example.com
-sources:
-  - https://github.com/ramesh/backend-app
+
+# Optional dependencies
+# dependencies:
+#   - name: somechart
+#     version: 1.2.3
+#     repository: https://charts.example.com/

@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-backend-ingress
+  name: backend-ingress
   namespace: default
   annotations:
     kubernetes.io/ingress.class: alb
@@ -10,7 +10,7 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
 spec:
   rules:
-  - host: myapp.rameshs.online
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
       - path: /
