@@ -2,8 +2,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - secrets.yml
-  - configmap.yml
-  - db_statefulset.yml
-  - backend_deployment.yml
-  - ingress.yml
+  - ../../base
+
+nameSuffix: -prod
+
+namePrifix: -app1
+
+labels:
+  - pairs:
+      env: prod
+      includeSeclectors: true
+
+replicas:
+  - name: Nginx-Deploy
+    count: 4
