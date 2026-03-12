@@ -5,7 +5,7 @@ pipeline {
     parameters {
         choice(
             name: 'ENVIRONMENT',
-            choices: ['Dev','Stage','Prod'],
+            choices: ['Dev', 'Stage', 'Prod'],
             description: 'Select the deployment environment'
         )
     }
@@ -16,6 +16,7 @@ pipeline {
     }
 
     stages {
+
         stage('Setting Up Deployment') {
             steps {
                 echo "Deployment to Environment: ${params.ENVIRONMENT}"
@@ -24,50 +25,128 @@ pipeline {
 
         stage('Check Out from SCM') {
             steps {
-                // git checkout steps here
+                git url: 'https://github.com/Rameshmamuduru/devops-exam-app.git', branch: 'master'
             }
         }
 
         stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'sonar-scanner'
+            }
             steps {
-                // code analysis steps
+                withSonarQubeEnv('SonarQube') {
+                    sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=backend-app \
+                        -Dsonar.projectName=backend-app \
+                        -Dsonar.sources=. \
+                        -Dsonar.language=py
+                    """
+                }
             }
         }
 
         stage('Quality Gates') {
             steps {
-                // check sonar quality gates
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: false
+                }
             }
         }
 
         stage('File System Scan') {
             steps {
-                // security scan or static analysis
+                sh '''
+                    echo "Running File System Security Scan"
+                    trivy fs --severity HIGH,CRITICAL \
+                        --format table \
+                        -o trivy-fs-report.txt .
+                '''
+
+                archiveArtifacts artifacts: 'trivy-fs-report.txt', fingerprint: true
             }
         }
 
         stage('Docker Login and Docker Build') {
             steps {
-                // docker login and docker build
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
+                        echo "Building Docker image: ${IMAGE_NAME}:${BUILD_NUMBER}"
+                        sh """
+                            docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .
+                        """
+                    }
+                }
             }
         }
 
         stage('Docker Image Scan') {
             steps {
-                // scan the image before push
+                script {
+                    echo "Scanning Docker image ${IMAGE_NAME}:${BUILD_NUMBER} for vulnerabilities"
+                    sh """
+                        trivy image --severity HIGH,CRITICAL --exit-code 1 \
+                            --format table -o trivy-image-report.txt ${IMAGE_NAME}:${BUILD_NUMBER}
+                    """
+                    archiveArtifacts artifacts: 'trivy-image-report.txt', fingerprint: true
+                }
             }
         }
 
         stage('Docker Tag and Docker Push') {
             steps {
-                // tag and push docker image
+                script {
+                    echo "Tagging and pushing Docker image: ${IMAGE_NAME}:${BUILD_NUMBER}"
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
+                        sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
+                        sh "docker push ${IMAGE_NAME}:${BUILD_NUMBER}"
+                        sh "docker push ${IMAGE_NAME}:latest"
+                    }
+                }
             }
         }
 
-        stage('Image Updater') {
+        stage('Image Tag Updater') {
             steps {
-                // update values.yaml for helm chart
+                script {
+                    def buildTag = "${BUILD_NUMBER}"
+                    def envFile = ""
+
+                    if (params.ENVIRONMENT == 'Dev') {
+                        envFile = 'helm/values-dev.yaml'
+                    } else if (params.ENVIRONMENT == 'Stage') {
+                        envFile = 'helm/values-stage.yaml'
+                    } else {
+                        envFile = 'helm/values-prod.yaml'
+                    }
+
+                    echo "Updating Helm values.yaml for ${params.ENVIRONMENT} environment with tag ${buildTag}"
+                    sh """
+                        yq e '.images.version = "${buildTag}"' -i ${envFile}
+                    """
+                }
             }
         }
+
+        stage('Deploy with Helm') {
+            steps {
+                script {
+                    def envFile = ""
+
+                    if (params.ENVIRONMENT == 'Dev') {
+                        envFile = 'helm/values-dev.yaml'
+                    } else if (params.ENVIRONMENT == 'Stage') {
+                        envFile = 'helm/values-stage.yaml'
+                    } else {
+                        envFile = 'helm/values-prod.yaml'
+                    }
+
+                    sh """
+                        helm upgrade --install myapp1 helm/ -f ${envFile} --namespace ${params.ENVIRONMENT.toLowerCase()}
+                    """
+                }
+            }
+        }
+
     }
 }
