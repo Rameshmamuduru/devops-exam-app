@@ -121,28 +121,35 @@ pipeline {
                     }
 
                     echo "Updating Helm values.yaml for ${params.ENVIRONMENT} environment with tag ${buildTag}"
+
                     sh """
                         yq e '.images.version = "${buildTag}"' -i ${envFile}
                     """
+                    
+                    echo "Testing Helm templates for ${params.ENVIRONMENT} environment"
+
+                    sh """
+                        helm template myapp1 helm/ -f ${envFile} --namespace ${params.ENVIRONMENT.toLowerCase()}
+                     """
                 }
             }
         }
 
-        stage('Deploy with Helm') {
+        stage('Committing and pushing updated Helm') {
             steps {
                 script {
-                    def envFile = ""
 
-                    if (params.ENVIRONMENT == 'Dev') {
-                        envFile = 'helm/values-dev.yaml'
-                    } else if (params.ENVIRONMENT == 'Stage') {
-                        envFile = 'helm/values-stage.yaml'
-                    } else {
-                        envFile = 'helm/values-prod.yaml'
-                    }
+                    input message: "Approve committing and pushing updated Helm values for ${params.ENVIRONMENT}?", ok: "Approve"
+                    echo "Approval received. Committing and pushing Helm values..."
+
+                    echo "Committing and pushing updated Helm values for ${params.ENVIRONMENT} with tag ${BUILD_NUMBER}"
 
                     sh """
-                        helm upgrade --install myapp1 helm/ -f ${envFile} --namespace ${params.ENVIRONMENT.toLowerCase()}
+                        git config user.email "jenkins@example.com"
+                        git config user.name "Jenkins"
+                        git add ${envFile}
+                        git commit -m "Update ${params.ENVIRONMENT} image tag to ${BUILD_NUMBER}"
+                        git push origin master
                     """
                 }
             }
