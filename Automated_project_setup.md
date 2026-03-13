@@ -92,12 +92,12 @@ kubectl apply -f crds.yaml
 kubectl get deployment -n kube-system
 
 # Expected Output
-root@ip-172-31-30-185:/home/ubuntu# kubectl get deployment -n kube-system
+```
+enkins@ip-172-31-37-33:~$ kubectl get deployment -n kube-system
 NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
-aws-load-balancer-controller   2/2     2            2           2m6s
-coredns                        2/2     2            2           14m
-metrics-server                 2/2     2            2           9m29s
-root@ip-172-31-30-185:/home/ubuntu# 
+aws-load-balancer-controller   2/2     2            2           42s
+coredns                        2/2     2            2           10m
+metrics-server                 2/2     2            2           5m27s
 ```
 
 
