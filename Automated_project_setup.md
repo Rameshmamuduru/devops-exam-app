@@ -90,18 +90,63 @@ kubectl apply -f crds.yaml
 
 # Verify the Controller Deployment
 kubectl get deployment -n kube-system
-
+```
 # Expected Output
 ```
-enkins@ip-172-31-37-33:~$ kubectl get deployment -n kube-system
+jenkins@ip-172-31-37-33:~$ kubectl get deployment -n kube-system
 NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
 aws-load-balancer-controller   2/2     2            2           42s
 coredns                        2/2     2            2           10m
 metrics-server                 2/2     2            2           5m27s
+
 ```
 
 
 <img width="1365" height="204" alt="image" src="https://github.com/user-attachments/assets/c9dc2faa-6e88-4d7f-8960-b28b90eaac0c" />
 
 <img width="1359" height="561" alt="image" src="https://github.com/user-attachments/assets/32d3da41-bb4e-46d8-ac15-5e9a4a4a0c38" />
+
+
+## Installation/Setup For Argo CD
+```
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+### Expected Output
+```
+NAME                                               READY   STATUS    RESTARTS      AGE
+argocd-application-controller-0                    1/1     Running   0             80s
+argocd-applicationset-controller-974d64569-vv6h2   1/1     Running   0             84s
+argocd-dex-server-66fc67645-zrsvh                  1/1     Running   2 (63s ago)   83s
+argocd-notifications-controller-5474d4cbb6-4zlgs   1/1     Running   0             83s
+argocd-redis-6888c8c66f-mbmkk                      1/1     Running   0             82s
+argocd-repo-server-6c4975f4ff-69m7d                1/1     Running   0             81s
+argocd-server-5f7ff864d5-h757z                     1/1     Running   0             81s
+```
+### Expose ArgoCD to Browser
+```
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
+kubectl get svc -n argocd
+
+#expected Output
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+argocd-applicationset-controller          ClusterIP   10.100.129.190   <none>        7000/TCP,8080/TCP            4m32s
+argocd-dex-server                         ClusterIP   10.100.42.7      <none>        5556/TCP,5557/TCP,5558/TCP   4m31s
+argocd-metrics                            ClusterIP   10.100.119.183   <none>        8082/TCP                     4m30s
+argocd-notifications-controller-metrics   ClusterIP   10.100.47.106    <none>        9001/TCP                     4m30s
+argocd-redis                              ClusterIP   10.100.240.24    <none>        6379/TCP                     4m29s
+argocd-repo-server                        ClusterIP   10.100.161.156   <none>        8081/TCP,8084/TCP            4m29s
+argocd-server                             NodePort    10.100.163.230   <none>        80:32487/TCP,443:31194/TCP   4m28s
+argocd-server-metrics                     ClusterIP   10.100.230.125   <none>        8083/TCP                     4m27s
+
+```
+* Allow port 32487 in the node security group and  access it on <http://node_public_ip:32487>
+* To get the intial password
+```
+kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode
+```
+<img width="1354" height="658" alt="image" src="https://github.com/user-attachments/assets/b5a697cf-dc85-4a38-a103-bdbb4fc35f58" />
+
+
 
