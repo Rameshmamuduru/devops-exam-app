@@ -13,6 +13,25 @@
 aws configure   # cofigure with access and secret key
 aws s3 ls        # Verify
 ```
+## Setup Jenkins
+- Access soanrqube on port <ec2_public_ip:8000>
+<img width="975" height="484" alt="image" src="https://github.com/user-attachments/assets/34ef2a54-46cf-4e36-aa3c-66eab437c526" />
+- install required plugins
+- Once done with the setup generate a PAT in GitHub and update that in jenkins global credentials
+- in the same way create Docker hub access token as well and update in the jenkins global credentials
+```
+sonarqube scanner, sonar quality gates and all docker plugins
+```
+## Setup SonarQube:
+- Access soanrqube on port <ec2_public_ip:9000>
+- Create access token
+- update access token in Jenkind global credentials
+- Create a webhook in sonarqube
+
+## Jenksins Tools and System configaration
+- Configure the tools section for sonar-scanner and docker
+- configure the system cinfigaration for Sonarqube server
+  
 ## Create EKS Cluster using eksctl
 ```
 eksctl create cluster \
