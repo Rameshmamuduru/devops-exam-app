@@ -16,14 +16,12 @@ aws s3 ls        # Verify
 ## Create EKS Cluster using eksctl
 ```
 eksctl create cluster \
-  --name my-eks-cluster \
+  --name my-cluster \
   --region us-east-1 \
-  --nodegroup-name standard-workers \
-  --node-type t3.medium \
   --nodes 2 \
-  --nodes-min 1 \
-  --nodes-max 3 \
+  --node-type t3.medium \
   --managed
+
 ```
 
 ## ALB Ingress setup
@@ -32,7 +30,7 @@ eksctl create cluster \
 # Enable OIDC Provider
 eksctl utils associate-iam-oidc-provider \
   --region us-east-1 \
-  --cluster my-eks-cluster \
+  --cluster my-cluster \
   --approve
 
 # Create IAM Role for
@@ -45,7 +43,7 @@ aws iam create-policy \
 
 # Create Service Account
 eksctl create iamserviceaccount \
-    --cluster=my-eks-cluster \
+    --cluster=my-cluster \
     --namespace=kube-system \
     --name=aws-load-balancer-controller \
     --attach-policy-arn=arn:aws:iam::738556366563:policy/AWSLoadBalancerControllerIAMPolicy \
@@ -61,7 +59,7 @@ helm repo update eks
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
-  --set clusterName=my-eks-cluster \
+  --set clusterName=my-cluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
   --version 1.14.0
