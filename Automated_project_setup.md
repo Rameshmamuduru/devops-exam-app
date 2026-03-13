@@ -160,11 +160,10 @@ kubectl apply -f cinfigmap.yml -n dev
 kubectl apply -f cinfigmap.yml -n stage
 kubectl apply -f cinfigmap.yml -n prod
 ```
-**secrets.yml and cofgmap.yml was there in k8s_manifets folder**
-
-===============================================================================================================================================================
+- secrets.yml and cofgmap.yml was there in k8s_manifets folder
+================================================================================================================================================
 ***NOTE: For Secrets.yml - change the MYSQL_HOST: according Mysql service and host name if not updated you can not submit your exam. it means your backend can not make a communication with DB***
-===============================================================================================================================================================
+================================================================================================================================================
 
 
 ## For test Manually cretaed App for Dev in Argo CD
