@@ -37,7 +37,7 @@ sonarqube scanner, sonar quality gates and all docker plugins
 eksctl create cluster \
   --name devops-exam-app-cluster \
   --region us-east-1 \
-  --nodes 2 \
+  --nodes 1 \
   --node-type t3.medium \
   --managed
 
