@@ -72,7 +72,7 @@ eksctl create iamserviceaccount \
     --region us-east-1 \
     --approve
 
-kubectl etl sa -n kube-system
+kubectl get sa -n kube-system
 
 # install AWS LB controller using Helm
 helm repo add eks https://aws.github.io/eks-charts
