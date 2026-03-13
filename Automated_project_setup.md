@@ -16,7 +16,7 @@ aws s3 ls        # Verify
 ## Create EKS Cluster using eksctl
 ```
 eksctl create cluster \
-  --name my-cluster \
+  --name devops-exam-app-cluster \
   --region us-east-1 \
   --nodes 2 \
   --node-type t3.medium \
@@ -30,7 +30,7 @@ eksctl create cluster \
 # Enable OIDC Provider
 eksctl utils associate-iam-oidc-provider \
   --region us-east-1 \
-  --cluster my-cluster \
+  --cluster devops-exam-app-cluster \
   --approve
 
 # Create IAM Role for
@@ -43,7 +43,7 @@ aws iam create-policy \
 
 # Create Service Account
 eksctl create iamserviceaccount \
-    --cluster=my-cluster \
+    --cluster=devops-exam-app-cluster \
     --namespace=kube-system \
     --name=aws-load-balancer-controller \
     --attach-policy-arn=arn:aws:iam::738556366563:policy/AWSLoadBalancerControllerIAMPolicy \
@@ -59,7 +59,7 @@ helm repo update eks
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
-  --set clusterName=my-cluster \
+  --set clusterName=devops-exam-app-cluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
   --version 1.14.0
