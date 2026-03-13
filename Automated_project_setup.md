@@ -148,5 +148,16 @@ kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.pa
 ```
 <img width="1354" height="658" alt="image" src="https://github.com/user-attachments/assets/b5a697cf-dc85-4a38-a103-bdbb4fc35f58" />
 
-
-
+## Apply Secrets and configmaps:
+```
+kubectl create namespace dev
+kubectl create namespace stage
+kubectl create namespace prod
+kubectl apply -f secrets.yml -n dev
+kubectl apply -f secrets.yml -n stage
+kubectl apply -f secrets.yml -n prod
+kubectl apply -f cinfigmap.yml -n dev
+kubectl apply -f cinfigmap.yml -n stage
+kubectl apply -f cinfigmap.yml -n prod
+```
+** secrets.yml and cofgmap.yml was there in k8s_manifets folder
