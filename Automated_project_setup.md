@@ -161,3 +161,14 @@ kubectl apply -f cinfigmap.yml -n stage
 kubectl apply -f cinfigmap.yml -n prod
 ```
 ** secrets.yml and cofgmap.yml was there in k8s_manifets folder
+
+## For test Manually cretaed App for Dev in Argo CD
+
+<img width="1365" height="666" alt="image" src="https://github.com/user-attachments/assets/66f193ad-eac1-41ee-95cd-2588b5a1ba06" />
+
+<img width="1365" height="413" alt="image" src="https://github.com/user-attachments/assets/cc3222ba-2b31-4a85-bd97-f2d80a20434b" />
+
+<img width="1365" height="700" alt="image" src="https://github.com/user-attachments/assets/7457bc72-78ab-48e6-be3f-0b47ab43c215" />
+
+
+
