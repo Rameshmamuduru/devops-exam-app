@@ -70,3 +70,16 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s htt
 
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
+
+#Install Helm
+echo "Installing Helm..."
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+echo "Helm version:"
+helm version
+
+#Install yq
+echo "Installing yq..."
+sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+sudo chmod +x /usr/local/bin/yq
+echo "yq version:"
+yq --version
