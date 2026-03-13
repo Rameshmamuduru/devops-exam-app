@@ -42,6 +42,8 @@ eksctl create cluster \
   --managed
 
 ```
+<img width="1364" height="492" alt="image" src="https://github.com/user-attachments/assets/e649d08e-c028-4213-babd-2b9ac61448a0" />
+
 
 ## ALB Ingress setup
 
