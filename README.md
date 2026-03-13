@@ -1,4 +1,4 @@
-# Project setup:
+# Manual Project setup:
 
 ## Launch a EC2 instance with large and 30 gb storage
 <img width="1365" height="621" alt="image" src="https://github.com/user-attachments/assets/6542fd8c-5ba8-4f4b-bf2d-fdc8d3caee82" />
@@ -142,6 +142,7 @@ Note: Make Sure that you have added your CNAME in the DNS Section under your dom
 <img width="1365" height="537" alt="image" src="https://github.com/user-attachments/assets/12024a31-cb94-42c9-8f55-abc72134c780" />
 
 The Data Was now relected in DB Table means all working fine
+
 
 
 
