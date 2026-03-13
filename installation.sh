@@ -1,11 +1,6 @@
 #!/bin/bash
 
 sudo apt install unzip -y
-#Install SonarQube
-docker run -d \
-  --name sonarqube \
-  -p 9000:9000 \
-  sonarqube:community
 
 #Installation of Jenkins
 sudo apt update -y
@@ -42,6 +37,12 @@ sudo apt install docker.io -y
 sudo usermod -aG docker jenkins
 sudo usermod -aG docker ubuntu
 newgrp docker
+
+#Install SonarQube
+docker run -d \
+  --name sonarqube \
+  -p 9000:9000 \
+  sonarqube:community
 
 #Install AWS CLI
 sudo apt install unzip -y
