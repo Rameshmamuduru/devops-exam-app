@@ -13,7 +13,7 @@ spec:
         app: {{ .Values.app.name }}-{{ .Values.namespace }}
     spec:
       containers:
-        - name: {{ .Release.Name }}-mysql-{{ .Values.namespace }}
+        - name: {{ .Release.Name }}-backend-{{ .Values.namespace }}
           image: {{ .Values.images.backend }}:{{ .Values.images.version }}
           ports:
             - containerPort: 5000
