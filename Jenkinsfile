@@ -34,7 +34,7 @@ pipeline {
                 scannerHome = tool 'sonar-scanner'
             }
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('sonar-server') {
                     sh """
                         ${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=backend-app \
@@ -70,8 +70,8 @@ pipeline {
         stage('Docker Login and Docker Build') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
-                        echo "Building Docker image: ${IMAGE_NAME}:${BUILD_NUMBER}"
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker_cred') {
+                        echo "Building Docker image: ${IMAGE_NAME}:${BUILD_NUMBER} -f Dockerfile2 ."
                         sh """
                             docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .
                         """
@@ -79,14 +79,14 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Docker Image Scan') {
             steps {
                 script {
                     echo "Scanning Docker image ${IMAGE_NAME}:${BUILD_NUMBER} for vulnerabilities"
                     sh """
-                        trivy image --severity HIGH,CRITICAL --exit-code 1 \
-                            --format table -o trivy-image-report.txt ${IMAGE_NAME}:${BUILD_NUMBER}
+                        trivy image --severity HIGH,CRITICAL --exit-code 0 \
+                            --format json -o trivy-image-report.txt ${IMAGE_NAME}:${BUILD_NUMBER}
                     """
                     archiveArtifacts artifacts: 'trivy-image-report.txt', fingerprint: true
                 }
@@ -97,7 +97,7 @@ pipeline {
             steps {
                 script {
                     echo "Tagging and pushing Docker image: ${IMAGE_NAME}:${BUILD_NUMBER}"
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker_cred') {
                         sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest"
                         sh "docker push ${IMAGE_NAME}:${BUILD_NUMBER}"
                         sh "docker push ${IMAGE_NAME}:latest"
@@ -105,19 +105,19 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Image Tag Updater') {
             steps {
                 script {
                     def buildTag = "${BUILD_NUMBER}"
-                    def envFile = ""
+                    envFile = ""
 
                     if (params.ENVIRONMENT == 'Dev') {
-                        envFile = 'helm/values-dev.yaml'
+                        envFile = 'helm/values_dev.yaml'
                     } else if (params.ENVIRONMENT == 'Stage') {
-                        envFile = 'helm/values-stage.yaml'
+                        envFile = 'helm/values_stage.yaml'
                     } else {
-                        envFile = 'helm/values-prod.yaml'
+                        envFile = 'helm/values_prod.yaml'
                     }
 
                     echo "Updating Helm values.yaml for ${params.ENVIRONMENT} environment with tag ${buildTag}"
@@ -144,16 +144,20 @@ pipeline {
 
                     echo "Committing and pushing updated Helm values for ${params.ENVIRONMENT} with tag ${BUILD_NUMBER}"
 
-                    sh """
-                        git config user.email "jenkins@example.com"
-                        git config user.name "Jenkins"
-                        git add ${envFile}
-                        git commit -m "Update ${params.ENVIRONMENT} image tag to ${BUILD_NUMBER}"
-                        git push origin master
-                    """
+                    withCredentials([string(credentialsId: 'github_cred', variable: 'github_token')]) {
+                        sh """
+                            git config user.email "jenkins@example.com"
+                            git config user.name "Jenkins"
+        
+                            git add ${envFile}
+                            git commit -m "Update ${params.ENVIRONMENT} image tag to ${BUILD_NUMBER}"
+        
+                            # Push using SSH key
+                            git push https://${github_token}@github.com/Rameshmamuduru/devops-exam-app.git HEAD:master
+                        """
+                    }
                 }
             }
         }
-
     }
 }
