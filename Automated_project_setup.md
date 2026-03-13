@@ -170,5 +170,39 @@ kubectl apply -f cinfigmap.yml -n prod
 
 <img width="1365" height="700" alt="image" src="https://github.com/user-attachments/assets/7457bc72-78ab-48e6-be3f-0b47ab43c215" />
 
+## ArgoCD App for seperate environment:
+- create seperate repository to have the single source of truth
+- you can follw ths below folder struture
+```
+argo-apps/                       # Optional: Argo CD App manifests per environment
+├── dev-app.yaml                 # Argo CD app for Dev cluster
+├── stage-app.yaml               # Argo CD app for Stage cluster
+└── prod-app.yaml                # Argo CD app for Prod cluster
+```
+- yaml file will be
 
+```
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: Argo-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: <Path/to/github>
+    targetRevision: <which/brach/to/target>
+    path:
+      helm:
+        valueFiles:
+          - values_dev.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: dev
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+
+```
 
