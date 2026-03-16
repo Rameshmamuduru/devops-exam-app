@@ -152,7 +152,6 @@ pipeline {
                             git add ${envFile}
                             git commit -m "Update ${params.ENVIRONMENT} image tag to ${BUILD_NUMBER}"
         
-                            # Push using SSH key
                             git push https://${github_token}@github.com/Rameshmamuduru/devops-exam-app.git HEAD:master
                         """
                     }
