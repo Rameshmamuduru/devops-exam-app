@@ -45,7 +45,7 @@ jobs:
           projectBaseDir: .
           args: >
             - Dsonar.projectName=Devops_exam_app
-            - Dsonar.projectKey=evops_exam_app
+            - Dsonar.projectKey=Devops_exam_app
             - Dsonar.language=py
             - Dsonar.sources=./
           
