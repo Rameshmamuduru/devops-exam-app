@@ -25,12 +25,6 @@ jobs:
         run: |
           echo "Deployment To Environment: ${{ github.event.inputs.ENVIRONMENT }}"
 
-  checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - name: CheckOut Git Repository
-        uses: actions/checkout@v3
-
   file_system_scan:
     runs-on: ubuntu-latest
     needs: setting_up_environment
@@ -77,7 +71,7 @@ jobs:
 
       - name: Push Image to Docker Hub
         run: |
-          echo "Push docker images to Docker Hub"
+          echo "Pushing Docker images to Docker Hub"
           docker push $IMAGE_NAME:$IMAGE_TAG
           docker push $IMAGE_NAME:latest
 
@@ -90,8 +84,8 @@ jobs:
 
       - name: Update Helm Values
         run: |
-          buildTag=${IMAGE_TAG}
           ENV="${{ github.event.inputs.ENVIRONMENT }}"
+          ENV_LOWER=$(echo "$ENV" | tr '[:upper:]' '[:lower:]')
 
           if [ "$ENV" == "Dev" ]; then
               envFile=helm/values_dev.yaml
@@ -101,11 +95,11 @@ jobs:
               envFile=helm/values_prod.yaml
           fi
 
-          echo "Updating Helm values file ${envFile} with image tag ${buildTag}"
-          yq e ".images.version = \"${buildTag}\"" -i $envFile
+          echo "Updating Helm values file ${envFile} with image tag ${IMAGE_TAG}"
+          yq e ".images.version = \"${IMAGE_TAG}\"" -i $envFile
 
           echo "Testing Helm templates for $ENV environment"
-          helm template myapp1 helm/ -f $envFile --namespace ${{ github.event.inputs.ENVIRONMENT.toLowerCase() }}
+          helm template myapp1 helm/ -f $envFile --namespace $ENV_LOWER
 
       - name: Commit & Push changes to Repository
         env:
