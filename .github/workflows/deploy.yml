@@ -102,7 +102,7 @@ jobs:
           yq e ".images.version = \"${buildTag}\"" -i $envFile
 
           echo "Testing Helm templates for ${{ github.event.inputs.ENVIRONMENT }} environment"
-          helm template myapp1 helm/ -f $envFile --namespace ${{ github.event.inputs.ENVIRONMENT | toLowerCase }}
+          helm template myapp1 helm/ -f $envFile --namespace ${{ github.event.inputs.ENVIRONMENT.toLowerCase }}
 
       - name: commit & push changes to Repository
         env:
