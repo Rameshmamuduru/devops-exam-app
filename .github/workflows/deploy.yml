@@ -1,9 +1,6 @@
 name: Build Docker image, push, and update Helm for EKS Deployment
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
     inputs:
       ENVIRONMENT:
