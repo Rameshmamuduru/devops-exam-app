@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: setting_up_environment
     steps:
-      - name: CheckOut Git Repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Trivy File System Scan
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: file_system_scan
     steps:
-      - name: CheckOut Git Repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Docker Login
@@ -79,12 +79,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker_login_build_tag_push
     steps:
-      - name: CheckOut Git Repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Update Helm Values
         run: |
           ENV="${{ github.event.inputs.ENVIRONMENT }}"
+          # Convert to lowercase in Bash to avoid '()' error
           ENV_LOWER=$(echo "$ENV" | tr '[:upper:]' '[:lower:]')
 
           if [ "$ENV" == "Dev" ]; then
