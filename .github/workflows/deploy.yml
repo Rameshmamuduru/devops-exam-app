@@ -40,10 +40,10 @@ jobs:
         with:
           projectBaseDir: .
           args: >
-            - Dsonar.projectName=Devops_exam_app
-            - Dsonar.projectKey=Devops_exam_app
-            - Dsonar.language=py
-            - Dsonar.sources=./
+            -Dsonar.projectName=Devops_exam_app
+            -Dsonar.projectKey=Devops_exam_app
+            -Dsonar.language=py
+            -Dsonar.sources=./
           
       - name: SonarQube Quality Gate check
         id: SonarQube-Quality-Gate-Check
