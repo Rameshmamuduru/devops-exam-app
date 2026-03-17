@@ -1,17 +1,12 @@
 replicaCount: 1
 namespace: dev
-
 app:
   name: app1
-
 images:
   mysql: mysql:8.0
   backend: ramesh0621/backend-1
-  version: latest
-
+  version: "17"
 ports:
   label: mysql
-
 ingress:
   host: myappdev.rameshs.online
-
