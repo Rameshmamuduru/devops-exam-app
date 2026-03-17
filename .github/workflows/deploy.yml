@@ -64,6 +64,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Installation of yq
+        run: |
+          sudo apt update
+          sudo apt install yq -y
+
       - name: Update Helm Values
         run: |
           ENV="${{ github.event.inputs.ENVIRONMENT }}"
