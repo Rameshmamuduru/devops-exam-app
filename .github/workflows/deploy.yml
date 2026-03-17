@@ -116,6 +116,19 @@ jobs:
           echo "Pushing Docker images to Docker Hub"
           docker push $IMAGE_NAME:$IMAGE_TAG
           docker push $IMAGE_NAME:latest
+  Docker_Image_Scan:
+    runs-on: ubuntu-latest
+    needs: docker_login_build_tag_push
+    steps:
+      - name: Scan Docker Image with Trivy
+        run: |
+          echo "Scanning Docker image $IMAGE_NAME:$IMAGE_TAG for vulnerabilities"
+          trivy image --severity HIGH,CRITICAL --exit-code 1 --format table -o trivy-image-report.txt $IMAGE_NAME:$IMAGE_TAG
+      - name: Upload Docker Image Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-image-report
+          path: trivy-image-report.txt
 
   image_tag_updater_for_helm:
     runs-on: ubuntu-latest
