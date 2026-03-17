@@ -5,7 +5,7 @@ app:
 images:
   mysql: mysql:8.0
   backend: ramesh0621/backend-1
-  version: "30"
+  version: "31"
 ports:
   label: mysql
 ingress:
