@@ -69,7 +69,9 @@ jobs:
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
           sudo chmod +x /usr/local/bin/yq
 
-      - name: Update Helm Values
+      - name: Update Helm Values and commiting changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           ENV="${{ github.event.inputs.ENVIRONMENT }}"
           # Convert to lowercase in Bash to avoid '()' error
@@ -88,11 +90,8 @@ jobs:
 
           echo "Testing Helm templates for $ENV environment"
           helm template myapp1 helm/ -f $envFile --namespace $ENV_LOWER
-
-      - name: Commit & Push changes to Repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        run: |
+          
+          echo "commiting changes to Github Repo.
           git config user.email "jenkins@example.com"
           git config user.name "Jenkins"
           git add ${envFile}
