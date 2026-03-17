@@ -25,6 +25,32 @@ jobs:
         run: |
           echo "Deployment To Environment: ${{ github.event.inputs.ENVIRONMENT }}"
 
+  File-System Scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CheckOut Git Repository
+        uses: actions/checkout@v3
+
+      - name: Install trivy on Runner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Trivy File System Scan
+        run: |
+          echo "Running File System Security Scan"
+          trivy fs --severity HIGH,CRITICAL --format table -o trivy-fs-report.txt .
+
+      - name: Upload FS Scan Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-fs-report
+          path: trivy-fs-report.txt
+
   docker_login_build_tag_push:
     runs-on: ubuntu-latest
     needs: setting_up_environment
