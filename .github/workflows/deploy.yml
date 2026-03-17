@@ -47,7 +47,7 @@ jobs:
           trivy fs --severity HIGH,CRITICAL --format table -o trivy-fs-report.txt .
 
       - name: Upload FS Scan Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-fs-report
           path: trivy-fs-report.txt
