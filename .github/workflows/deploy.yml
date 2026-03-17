@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "Deployment To Environment: ${{ github.event.inputs.ENVIRONMENT }}"
 
-  File-System Scan:
+  File_System Scan:
     runs-on: ubuntu-latest
     steps:
       - name: CheckOut Git Repository
