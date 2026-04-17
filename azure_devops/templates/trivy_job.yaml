@@ -1,7 +1,6 @@
 parameters:
   vmImage: 'ubuntu-latest'
-  projectKey: ''
-  projectName: ''
+ 
 
 jobs:
   - job: File system scan
