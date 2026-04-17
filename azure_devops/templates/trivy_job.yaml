@@ -1,1 +1,36 @@
+parameters:
+  vmImage: 'ubuntu-latest'
+  projectKey: ''
+  projectName: ''
 
+jobs:
+  - job: File system scan
+    displayname: File system scan
+    steps:
+      - checkout: self
+      
+      - script: |
+      displayName: "Install Trivy"
+        echo "Installing Trivy..."
+        sudo apt-get update
+        sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+        wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+        echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/trivy.list
+        sudo apt-get update
+        sudo apt-get install -y trivy
+        
+      - script: |
+        echo "Running Trivy File System Scan..."
+
+        trivy fs . \
+          --severity HIGH,CRITICAL \
+          --exit-code 1 \
+          --format table \
+          -o trivy-fs-report.txt .
+      displayName: "Run Trivy Scan"
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: 'trivy-fs-report.txt'
+          ArtifactName: 'trivy-fs-report'
+          publishLocation: 'Container'
