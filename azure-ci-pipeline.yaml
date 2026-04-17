@@ -1,5 +1,6 @@
-triggers:
-  - main
+trigger:
+- main
+
 resources:
   repositories:
     - repository: templates
@@ -9,33 +10,40 @@ resources:
       ref: refs/heads/main
 
 stages:
-  - stage: CI
-    displayname: CI-Pipeline
+- stage: CI
+  displayName: CI-Pipeline
 
-jobs:
+  jobs:
+
   - template: templates/test.yaml@templates
-      
+    parameters:
+      jobName: TestJob
+
   - template: templates/sonarqube_job.yaml@templates
     parameters:
+      jobName: SonarJob
       projectKey: 'test'
       projectName: 'test'
-      dependsOn: testjob
+      dependsOn: TestJob
 
   - template: templates/trivy_job.yaml@templates
-    dependsOn: Sonarqube-analysis
-  
+    parameters:
+      jobName: TrivyFSJob
+      dependsOn: SonarJob
+
   - template: templates/docker_job.yaml@templates
     parameters:
+      jobName: DockerJob
       repository: 'my_app'
-      dependsOn: File system scan
+      dependsOn: TrivyFSJob
 
-   - template: templates/trivy_imagescan.yaml@templates
+  - template: templates/trivy_imagescan.yaml@templates
     parameters:
+      jobName: TrivyImageJob
       IMAGE_NAME: 'my_app'
-      dependsOn: docker-job
+      dependsOn: DockerJob
 
   - template: templates/manifest_updater.yaml@templates
-    dependsOn: Trivy Image Scan
-    
-
-  
+    parameters:
+      jobName: ManifestUpdateJob
+      dependsOn: TrivyImageJob
