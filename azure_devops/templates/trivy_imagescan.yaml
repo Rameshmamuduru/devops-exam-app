@@ -1,7 +1,6 @@
 parameters:
   vmImage: 'ubuntu-latest'
   IMAGE_NAME: ''
-  Build.BuildId: ''
 
 jobs:
 - job: Trivy Image Scan
