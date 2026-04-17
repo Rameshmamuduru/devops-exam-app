@@ -1,7 +1,6 @@
 parameters:
   vmImage: 'ubuntu-latest'
   repository: ''
-  artifactName: 'drop'
 
 jobs:
 - job: BuildJob
