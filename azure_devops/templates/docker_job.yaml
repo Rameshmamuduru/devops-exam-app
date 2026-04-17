@@ -3,7 +3,7 @@ parameters:
   repository: ''
 
 jobs:
-- job: BuildJob
+- job: docker-job
   pool:
     vmImage: ${{ parameters.vmImage }}
 
