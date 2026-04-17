@@ -1,0 +1,41 @@
+triggers:
+  - main
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: Rameshmamuduru/DevOps_Tools_flow
+      endpoint: test
+      ref: refs/heads/main
+
+stages:
+  - stage: CI
+    displayname: CI-Pipeline
+
+jobs:
+  - template: templates/test.yaml@templates
+      
+  - template: templates/sonarqube_job.yaml@templates
+    parameters:
+      projectKey: 'test'
+      projectName: 'test'
+      dependsOn: testjob
+
+  - template: templates/trivy_job.yaml@templates
+    dependsOn: Sonarqube-analysis
+  
+  - template: templates/docker_job.yaml@templates
+    parameters:
+      repository: 'my_app'
+      dependsOn: File system scan
+
+   - template: templates/trivy_imagescan.yaml@templates
+    parameters:
+      IMAGE_NAME: 'my_app'
+      dependsOn: docker-job
+
+  - template: templates/manifest_updater.yaml@templates
+    dependsOn: Trivy Image Scan
+    
+
+  
