@@ -1,0 +1,18 @@
+parameters:
+  vmImage: 'ubuntu-latest'
+  projectKey: ''
+  projectName: ''
+
+jobs:
+  - job: Sonarqube-analysis
+    displayname: Sonarqube-analysis
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+    steps:
+      - checkout: self
+      - task: SonarQubePrepare@8
+        inputs:
+          SonarQube: 'test-sonar'
+          scannerMode: 'dotnet'
+          projectKey: '${{parameters.projectKey}}'
+          projectName: '${{parameters.projectName}}'
