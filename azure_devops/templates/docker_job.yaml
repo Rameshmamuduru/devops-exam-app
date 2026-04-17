@@ -1,0 +1,18 @@
+parameters:
+  vmImage: 'ubuntu-latest'
+  repository: ''
+  artifactName: 'drop'
+
+jobs:
+- job: BuildJob
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+
+  steps:
+  - checkout: self
+  - - task: Docker@2
+      inputs:
+        containerRegistry: 'test-docker'
+        repository: '${{ parameters.repository }}'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
