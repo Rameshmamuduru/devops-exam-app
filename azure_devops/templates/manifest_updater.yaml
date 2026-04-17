@@ -1,8 +1,6 @@
 parameters:
   vmImage: 'ubuntu-latest'
   
-  
-
 jobs:
 - job: Manifest-image-tag-updater
   pool:
