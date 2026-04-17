@@ -1,0 +1,25 @@
+parameters:
+  vmImage: 'ubuntu-latest'
+  
+  
+
+jobs:
+- job: Manifest-image-tag-updater
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+  steps:
+    - script: |
+        buildTag = "${Build.BuildId}"
+        envFile = ""
+
+        if [ "${{ parameters.env }}" == "dev" ]; then
+          envFile="helm/values_${{ parameters.env }}.yaml"
+        elif [ "${{ parameters.qa }}" == "stage" ]; then
+          envFile="helm/values_${{ parameters.env }}.yaml"
+        else
+          envFile="helm/values_${{ parameters.env }}.yaml"
+        fi
+        echo "Updating Helm values file: $envFile with tag $buildTag"
+        yq e ".images.version = \"$buildTag\"" -i $envFile
+        helm template myapp1 helm/ -f $envFile --namespace ${{ parameters.env }}
+      displayName: "Update Helm values & validate"
