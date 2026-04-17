@@ -16,3 +16,14 @@ jobs:
           scannerMode: 'dotnet'
           projectKey: '${{parameters.projectKey}}'
           projectName: '${{parameters.projectName}}'
+
+      - bash: |
+          displayName: "Enforce Quality Gate"
+          echo "Quality Gate Status: $(SONARQUBEQUALITYGATESTATUS)"
+          if ["$(SONARQUBEQUALITYGATESTATUS)" != "passed" ]; then
+          echo "Quality Gate Failed - Failing Pipeline"
+          exit 1
+          else
+          echo "✅ Quality Gate Passed"
+          fi
+      
