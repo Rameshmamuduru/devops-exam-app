@@ -1,0 +1,22 @@
+parameters:
+  vmImage: 'ubuntu-latest'
+  IMAGE_NAME: ''
+  Build.BuildId: ''
+
+jobs:
+- job: Trivy Image Scan
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+
+  steps:
+  - script: |
+      echo "Scanning Docker image ${{ parameters.IMAGE_NAME }}:${{ parameters.Build.BuildId }} for vulnerabilities"
+      trivy image --severity HIGH,CRITICAL --exit-code 0 --format json -o trivy-image-report.txt ${{ parameters.IMAGE_NAME }}:${{ parameters.Build.BuildId }}
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'trivy-image-report.txt'
+      ArtifactName: 'trivy-image-report'
+      publishLocation: 'Container'
+
+  
